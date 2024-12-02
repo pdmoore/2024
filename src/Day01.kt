@@ -1,19 +1,25 @@
 import java.util.*
+import java.util.Collections.*
 import java.util.stream.IntStream
 import kotlin.math.abs
 
 fun main() {
-    fun part1(input: List<String>): Int {
-        var firstList: List<Int> = ArrayList()
-        var secondList: List<Int> = ArrayList()
+    fun convertStringListToListsOfIntegers(input: List<String>): Pair<List<Int>, List<Int>> {
+        var firstList = ArrayList<Int>()
+        var secondList = ArrayList<Int>()
 
-        for (s in input) {
+        input.forEach { s ->
             val s1 = s.split(" {3,}".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             firstList += s1[0].toInt()
             secondList += s1[1].toInt()
         }
-        Collections.sort(firstList)
-        Collections.sort(secondList)
+        return Pair(firstList, secondList)
+    }
+
+    fun part1(input: List<String>): Int {
+        var (firstList: List<Int>, secondList: List<Int>) = convertStringListToListsOfIntegers(input)
+        sort(firstList)
+        sort(secondList)
 
         return IntStream
             .range(0, firstList.size)
@@ -25,32 +31,25 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        var firstList: List<Int> = ArrayList()
-        var secondList: List<Int> = ArrayList()
+        var (firstList: List<Int>, secondList: List<Int>) = convertStringListToListsOfIntegers(input)
 
-        for (s in input) {
-            val s1 = s.split(" {3,}".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            firstList += s1[0].toInt()
-            secondList += s1[1].toInt()
-        }
-
-        val secondListAppearance = HashMap<Int, Int>()
-        for (integer in secondList) {
-            secondListAppearance[integer] = secondListAppearance.getOrDefault(integer, 0) + 1
+        val secondListAppearances = HashMap<Int, Int>()
+        secondList.forEach { integer ->
+            secondListAppearances[integer] = secondListAppearances.getOrDefault(integer, 0) + 1
         }
 
         return firstList
             .stream()
-            .mapToInt { integer: Int -> integer * secondListAppearance.getOrDefault(integer, 0) }
+            .mapToInt { integer: Int -> integer * secondListAppearances.getOrDefault(integer, 0) }
             .sum()
     }
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
+    // Confirm solutions work on example data provided
     val testInput = readInput("Day01_example")
     check(part1(testInput) == 11)
     check(part2(testInput) == 31)
 
-    // Read the input from the `src/Day01.txt` file.
+    // Now solve the day's puzzle input
     val input = readInput("Day01")
     part1(input).println()
     part2(input).println()
