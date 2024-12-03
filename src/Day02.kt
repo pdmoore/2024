@@ -1,8 +1,10 @@
 fun main() {
-
-
     fun isSafe(line: String?): Boolean {
-        val levels = line!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val levels = line!!
+            .split(" ".toRegex())
+            .dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+
         val decreasing = levels[0].toInt() > levels[1].toInt()
         for (i in 1..<levels.size) {
             val next = levels[i].toInt()
@@ -28,15 +30,18 @@ fun main() {
 
     fun isTolerantSafe(line: String?): Boolean {
         // for each line, slice out one level and test if the resulting report is safe or not
-        val levels = line!!.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val levels = line!!
+            .split(" ".toRegex())
+            .dropLastWhile { it.isEmpty() }
+            .toTypedArray()
 
-        for (i in levels.indices) {
+        levels.indices.forEach { i ->
             val reportWithOneSkippedLevel = StringBuilder()
-            for (j in levels.indices) {
-                if (i != j) {
-                    reportWithOneSkippedLevel.append(levels[j]).append(" ")
-                }
-            }
+            levels.indices
+                .asSequence()
+                .filter { i != it }
+                .forEach { reportWithOneSkippedLevel.append(levels[it]).append(" ") }
+
             if (isSafe(reportWithOneSkippedLevel.toString())) {
                 return true
             }
@@ -52,14 +57,10 @@ fun main() {
             .count().toInt()
     }
 
-
-
     // Confirm solutions work on example data provided
     val testInput = readInput("Day02_example")
     check(part1(testInput) == 2)
     check(part2(testInput) == 4)
-
-
 
     // Now solve the day's puzzle input
     val input = readInput("Day02")
