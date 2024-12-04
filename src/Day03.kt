@@ -1,4 +1,5 @@
 import java.util.regex.Pattern
+import java.util.stream.Collectors
 
 fun main() {
     // Confirm solutions work on example data provided
@@ -27,7 +28,7 @@ fun part1(input: String): Any {
 
 fun part2(input: String): Any {
     val pattern = Pattern.compile("don't\\(\\).*?do\\(\\)", Pattern.DOTALL)
-    return part1(java.lang.String.join("", *pattern.split(input)))
+    return part1(pattern.splitAsStream(input).collect(Collectors.joining()))
 }
 
 
