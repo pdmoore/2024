@@ -30,5 +30,3 @@ fun part2(input: String): Any {
     val pattern = Pattern.compile("don't\\(\\).*?do\\(\\)", Pattern.DOTALL)
     return part1(pattern.splitAsStream(input).collect(Collectors.joining()))
 }
-
-
