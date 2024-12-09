@@ -6,12 +6,10 @@ fun main() {
     check(part1(testInput) == BigInteger("3749"))
     check(part2(testInput) == BigInteger("11387"))
 
-
-
-
-
-
-
+    // Now solve the day's puzzle input
+    val input = readInput("Day07")
+    part1(input).println()
+    part2(input).println()
 }
 
 fun part1(input: List<String>): Any {
@@ -19,11 +17,10 @@ fun part1(input: List<String>): Any {
 
     for (line in input) {
         val split = line.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val lhs = split[0]
+        val lhs = split[0].toBigInteger()
         val rhs = split[1].trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-
         if (canBeCalibrated(lhs, rhs, false)) {
-            result = result.add(BigInteger(lhs))
+            result = result.add(lhs)
         }
     }
 
@@ -35,19 +32,19 @@ fun part2(input: List<String>): Any {
 
     for (line in input) {
         val split = line.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val lhs = split[0]
+        val lhs = split[0].toBigInteger()
         val rhs = split[1].trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         if (canBeCalibrated(lhs, rhs, true)) {
-            result = result.add(BigInteger(lhs))
+            result = result.add(lhs)
         }
     }
 
     return result
 }
 
-fun canBeCalibrated(lhs: String, rhs: Array<String>, tryConcatenation: Boolean): Boolean {
-    val target = BigInteger(lhs)
+fun canBeCalibrated(lhs: BigInteger, rhs: Array<String>, tryConcatenation: Boolean): Boolean {
+    val target = lhs
 
     val bigIntegersRemaining: MutableList<BigInteger> = ArrayList()
     for (rh in rhs) {
