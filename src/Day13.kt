@@ -10,35 +10,20 @@ fun main() {
     part1(input, BigInteger("10000000000000")).println()
 }
 
-    class ButtonPushes {
-        var tokenCostBI: BigInteger? = null
-        var aBI: BigInteger? = null
-        var bBI: BigInteger? = null
-
-        constructor(pushA: BigInteger, pushB: BigInteger?) {
-            aBI = pushA
-            bBI = pushB
-
-            tokenCostBI = pushA.multiply(BigInteger.valueOf(3)).add(pushB)
-        }
-    }
-
-
 fun part1(input: List<String>, offset: BigInteger): Any {
     var tokensNeeded = BigInteger.ZERO
 
         var i = 0
         while (i < input.size) {
-            val bp: ButtonPushes = findWinningMovesPart2(input.subList(i, i + 3), offset)
-            tokensNeeded = tokensNeeded.add(bp.tokenCostBI)
+            val tokenCost: BigInteger = findWinningMovesPart2(input.subList(i, i + 3), offset)
+            tokensNeeded = tokensNeeded.add(tokenCost)
             i += 4
         }
-
 
     return tokensNeeded
 }
 
-fun findWinningMovesPart2(input: List<String>, offset: BigInteger): ButtonPushes {
+fun findWinningMovesPart2(input: List<String>, offset: BigInteger): BigInteger {
     val aValues: Array<String> =
         input.get(0).replace("Button A:", "").trim { it <= ' ' }.split(",".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray() // a deltas
@@ -55,10 +40,8 @@ fun findWinningMovesPart2(input: List<String>, offset: BigInteger): ButtonPushes
     val bXmovement = BigInteger(bValues[0].split("\\+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1])
     val bYmovement = BigInteger(bValues[1].split("\\+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1])
 
-
     val longX = targets[0].split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].toLong()
     val longY = targets[1].split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].toLong()
-
 
     val prize0 = offset.add(BigInteger.valueOf(longX))
     val prize1 = offset.add(BigInteger.valueOf(longY))
@@ -79,9 +62,9 @@ fun findWinningMovesPart2(input: List<String>, offset: BigInteger): ButtonPushes
     val checkY = a.multiply(aYmovement)
         .add(b.multiply(bYmovement))
     if (prize0 == checkX && prize1 == checkY) {
-        return ButtonPushes(a, b)
+        return a.multiply(BigInteger.valueOf(3)).add(b)
     }
 
-    return ButtonPushes(BigInteger.ZERO, BigInteger.ZERO)
+    return BigInteger.ZERO
 }
 
